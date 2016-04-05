@@ -1,0 +1,3 @@
+Serve this folder over a simple http server. e.g
+
+	 python2 -m SimpleHTTPServer 9000
