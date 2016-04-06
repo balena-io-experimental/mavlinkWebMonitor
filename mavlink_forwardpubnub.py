@@ -71,7 +71,7 @@ def killWithFireCallback(message, channel):
                 master.target_component, # target_component
                 mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, # command
                 0, # confirmation
-                0, # param1
+                1, # param1
                 0, # param2
                 0, # param3
                 0, # param4
