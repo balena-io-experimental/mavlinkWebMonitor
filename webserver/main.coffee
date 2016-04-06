@@ -41,6 +41,11 @@ pubnub = PUBNUB(
 # update = ->
 	# pub()
 	# setTimeout(update, 500)
+pubnub.subscribe(
+	channel : 'speed',
+	message : (msg, envelope, channelOrGroup, time, channel) ->
+		document.getElementById('speed').innerText = (1 / msg).toFixed(1) + 'Hz'
+)
  
 console.log("Subscribing..")
 pubnub.subscribe(
@@ -48,6 +53,7 @@ pubnub.subscribe(
 	message : (msg, envelope, channelOrGroup, time, channel) ->
 		if not Array.isArray(msg)
 			return
+
 		[ x_series, y_series, z_series ] = chart.series
 		[ t, x, y, z ] = msg
 

@@ -46,6 +46,13 @@
     subscribe_key: 'sub-c-28f51c78-fa8e-11e5-8679-02ee2ddab7fe'
   });
 
+  pubnub.subscribe({
+    channel: 'speed',
+    message: function(msg, envelope, channelOrGroup, time, channel) {
+      return document.getElementById('speed').innerText = (1 / msg).toFixed(1) + 'Hz';
+    }
+  });
+
   console.log("Subscribing..");
 
   pubnub.subscribe({
