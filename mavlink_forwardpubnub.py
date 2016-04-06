@@ -27,17 +27,18 @@ def loop_messages(m):
     while True:
         msg = m.recv_match(type='ATTITUDE')
         if msg:
+            now = time.time()
             if first:
                 # Sent a timestamp message when we treat first gyro value
-                pubnub.publish(channel='status', message=[time.time() * 1000, 'start'])
+                pubnub.publish(channel='status', message=[now * 1000, 'start'])
                 first=False
             else:
                 if delay():
                     continue
             if debug:
-                print("forwardpubnub %f: %f,%f,%f" % (time.time() * 1000, msg.pitch, msg.yaw, msg.roll))
+                print("forwardpubnub %f: %f,%f,%f" % (now * 1000, msg.pitch, msg.yaw, msg.roll))
             else:
-                pubnub.publish(channel='gyroscope', message=[time.time() * 1000, msg.pitchspeed, msg.yawspeed, msg.rollspeed])
+                pubnub.publish(channel='gyroscope', message=[now * 1000, msg.pitchspeed, msg.yawspeed, msg.rollspeed])
 
         try:
             conn, addr = server.accept()
