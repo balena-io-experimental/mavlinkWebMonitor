@@ -88,7 +88,7 @@ def killWithFireCallback(message, channel):
 print("forwardpubnub: Initialize module")
 
 debug=False
-mindelay = 5.0
+mindelay = 0.2
 last = time.time()
 device='/dev/ttyMFD1'
 baudrate='921600'
