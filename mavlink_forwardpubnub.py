@@ -29,8 +29,6 @@ def loop_messages(m):
         if msg:
             now = time.time()
             if first:
-                # Sent a timestamp message when we treat first gyro value
-                pubnub.publish(channel='status', message=[now * 1000, 'start'])
                 first=False
             else:
                 if delay():
@@ -123,6 +121,9 @@ except:
 
 # Open serial
 master = mavutil.mavlink_connection(device, baudrate)
+
+# Sent a timestamp message when we are ready
+pubnub.publish(channel='status', message=[time.time() * 1000, 'start'])
 
 if os.path.exists(sockfile):
     os.remove(sockfile)
