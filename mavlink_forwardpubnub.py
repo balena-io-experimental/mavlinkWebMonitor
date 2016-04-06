@@ -100,4 +100,5 @@ loop_messages(master)
 # Close serial
 master.close()
 
-sys.exit(0)
+# Force exit all threads too
+os._exit(0)
