@@ -30,7 +30,7 @@ def loop_messages(m):
             if debug:
                 print("forwardpubnub %f: %f,%f,%f" % (last * 1000, msg.pitch, msg.yaw, msg.roll))
             else:
-                pubnub.publish(channel='gyroscope', message=[last * 1000, msg.pitch, msg.yaw, msg.roll])
+                pubnub.publish(channel='gyroscope', message=[last * 1000, msg.pitchspeed, msg.yawspeed, msg.rollspeed])
 
         try:
             conn, addr = server.accept()
