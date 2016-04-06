@@ -38,7 +38,7 @@ class ForwardPubnub(mp_module.MPModule):
                 self.master.mav.command_long_send(
                     self.settings.target_system,  # target_system
                     mavutil.mavlink.MAV_COMP_ID_SYSTEM_CONTROL, # target_component
-                    mavutil.mavlink.MAV_CMD_DO_SET_MODE, # command
+                    mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, # command
                     0, # confirmation
                     0, # param1
                     0, # param2

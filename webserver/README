@@ -1,3 +1,8 @@
-Serve this folder over a simple http server. e.g
+HOW TO USE IT
+=============
 
-	 python2 -m SimpleHTTPServer 9000
+1. Serve this folder over a simple http server. e.g
+
+    python2 -m SimpleHTTPServer 9000
+
+2. Open a browser at: http://localhost:9000/
