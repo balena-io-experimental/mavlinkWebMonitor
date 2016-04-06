@@ -10,4 +10,11 @@ COPY ./mavproxy_forwardpubnub.py /usr/local/lib/python2.7/site-packages/MAVProxy
 # Autoload the mavlink module
 COPY ./mavinit.scr /root/.mavinit.scr
 
-CMD /bin/sh -c 'mavproxy.py --master=/dev/ttyMFD1 --baudrate=921600 --logfile=/dev/null --daemon; sleep 999999;'
+# Mavlink monitor
+COPY ./mavlink_forwardpubnub.py /bin
+
+# Use the mavproxy tool
+#CMD /bin/sh -c 'mavproxy.py --master=/dev/ttyMFD1 --baudrate=921600 --logfile=/dev/null --daemon; sleep 999999;'
+
+# Use the mavlink tool
+CMD mavlink_forwardpubnub.py
