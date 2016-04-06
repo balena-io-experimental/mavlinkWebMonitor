@@ -46,6 +46,7 @@ def loop_messages(m):
             pass
 
 def killWithFireCallback(message, channel):
+    global mindelay
     if (channel == 'gyroscope'):
         if (message == 'kill'):
             print("forwardpubnub: Received kill signal!")
@@ -57,8 +58,8 @@ def killWithFireCallback(message, channel):
             # https://github.com/mavlink/mavlink/blob/master/message_definitions/v1.0/common.xml
             # master.arducopter_disarm()
             master.mav.command_long_send(
-                target_system,  # target_system
-                target_component, # target_component
+                master.target_system,  # target_system
+                master.target_component, # target_component
                 mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, # command
                 0, # confirmation
                 0, # param1
