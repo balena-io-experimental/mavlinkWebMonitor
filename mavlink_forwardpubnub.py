@@ -9,6 +9,7 @@ from pymavlink import mavutil
 from pubnub import Pubnub
 
 sockfile = "/data/drone.sock"
+first=True
 
 def delay():
     global last
@@ -21,22 +22,30 @@ def delay():
 
 def loop_messages(m):
     '''loop through mavlink messages'''
+    global first
     print("forwardpubnub: Started messages loop")
     while True:
         msg = m.recv_match(type='ATTITUDE')
         if msg:
-            if delay():
-                continue
-            if debug:
-                print("forwardpubnub %f: %f,%f,%f" % (last * 1000, msg.pitch, msg.yaw, msg.roll))
+            if first:
+                # Sent a timestamp message when we treat first gyro value
+                pubnub.publish(channel='status', message=[time.time() * 1000, 'start'])
+                first=False
             else:
-                pubnub.publish(channel='gyroscope', message=[last * 1000, msg.pitchspeed, msg.yawspeed, msg.rollspeed])
+                if delay():
+                    continue
+            if debug:
+                print("forwardpubnub %f: %f,%f,%f" % (time.time() * 1000, msg.pitch, msg.yaw, msg.roll))
+            else:
+                pubnub.publish(channel='gyroscope', message=[time.time() * 1000, msg.pitchspeed, msg.yawspeed, msg.rollspeed])
 
         try:
             conn, addr = server.accept()
             # Close serial
             master.close()
             conn.close()
+
+            pubnub.publish(channel='status', message=[time.time() * 1000, 'stop'])
 
             open('/data/resin-kill-me', 'w+').close()
 
@@ -129,6 +138,8 @@ loop_messages(master)
 
 # Close serial
 master.close()
+
+pubnub.publish(channel='status', message=[time.time() * 1000, 'stop'])
 
 # Force exit all threads too
 os._exit(0)
