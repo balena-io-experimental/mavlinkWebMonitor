@@ -86,7 +86,7 @@ pubnub.subscribe(
 		[ t, x, y, z ] = msg
 
 		# shift if the series is longer than 20
-		shift = x_series.data.length > 40
+		shift = x_series.data.length > 100
 
 		x_series.addPoint([t, x], true, shift)
 		y_series.addPoint([t, y], true, shift)

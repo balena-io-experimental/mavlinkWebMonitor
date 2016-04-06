@@ -94,7 +94,7 @@ pubnub.subscribe({
     }
     ref = chart.series, x_series = ref[0], y_series = ref[1], z_series = ref[2];
     t = msg[0], x = msg[1], y = msg[2], z = msg[3];
-    shift = x_series.data.length > 40;
+    shift = x_series.data.length > 100;
     x_series.addPoint([t, x], true, shift);
     y_series.addPoint([t, y], true, shift);
     return z_series.addPoint([t, z], true, shift);
