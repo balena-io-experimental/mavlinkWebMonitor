@@ -23,14 +23,14 @@ def loop_messages(m):
         if not msg:
             return
         if msg.get_type() == 'ATTITUDE':
-            print("received")
             if delay():
-                return
+                continue
             if debug:
-                print("forwardpubnub %f: %f,%f,%f" % (time.time() * 1000, msg.pitch, msg.yaw, msg.roll))
+                print("forwardpubnub %f: %f,%f,%f" % (last * 1000, msg.pitch, msg.yaw, msg.roll))
             else:
-                print("forwardpubnub %f: %f,%f,%f" % (time.time() * 1000, msg.pitch, msg.yaw, msg.roll))
-                pubnub.publish(channel='gyroscope', message=[time.time() * 1000, msg.pitch, msg.yaw, msg.roll])
+                print("forwardpubnub %f: %f,%f,%f" % (last * 1000, msg.pitch, msg.yaw, msg.roll))
+                pubnub.publish(channel='gyroscope', message=[last * 1000, msg.pitch, msg.yaw, msg.roll])
+            return
 
 def killWithFireCallback(message, channel):
     if (channel == 'gyroscope'):
@@ -76,7 +76,7 @@ print("forwardpubnub: Initialize module")
 
 debug=False
 mindelay = 5.0
-last = 0.0
+last = time.time()
 device='/dev/ttyMFD1'
 baudrate='921600'
 
