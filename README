@@ -1,0 +1,6 @@
+Monitor attitude parameters from mavlinkproxy using a graph
+===========================================================
+
+1. Push this project to a resin device.
+
+2. Start the webserver using the instructions in 'webserver' subdirectory.
