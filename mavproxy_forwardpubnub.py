@@ -12,7 +12,7 @@ class ForwardPubnub(mp_module.MPModule):
         print("forwardpubnub: Initialize module")
         super(ForwardPubnub, self).__init__(mpstate, "forwardpubnub", "Monitor Messages and forward them to pubnub")
 
-        self.mindelay = 1
+        self.mindelay = 5
         self.last = 0.0
         self.debug=False
 
@@ -23,16 +23,15 @@ class ForwardPubnub(mp_module.MPModule):
         # Pubnub stuff
         self.pubnubPublishKey=os.getenv('PUBNUB_PUBLISH_KEY', '')
         self.pubnubSubscribeKey=os.getenv('PUBNUB_SUBSCRIBE_KEY', '')
-        self.pubnubChannel=os.getenv('PUBNUB_CHANNEL', '')
-        if (not self.pubnubPublishKey) or (not self.pubnubSubscribeKey) or (not self.pubnubChannel):
-            print("forwardpubnub: PUBNUB_PUBLISH_KEY and/or PUBNUB_SUBSCRIBE_KEY and/or PUBNUB_CHANNEL not available. Please set all these env variables.")
+        if (not self.pubnubPublishKey) or (not self.pubnubSubscribeKey):
+            print("forwardpubnub: PUBNUB_PUBLISH_KEY and/or PUBNUB_SUBSCRIBE_KEY not available. Please set all these env variables.")
         self.pubnub = Pubnub(publish_key=self.pubnubPublishKey, subscribe_key=self.pubnubSubscribeKey)
-        self.pubnub.subscribe(channels=self.pubnubChannel, callback=self.killWithFireCallback)
+        self.pubnub.subscribe(channels='gyroscope', callback=self.killWithFireCallback)
 
         print("forwardpubnub: Module initialized")
 
     def killWithFireCallback(self, message, channel):
-        if (channel == self.pubnubChannel):
+        if (channel == 'gyroscope'):
             if (message == 'kill'):
                 print("forwardpubnub: Received kill!")
                 # https://github.com/mavlink/mavlink/blob/master/message_definitions/v1.0/common.xml
@@ -53,11 +52,13 @@ class ForwardPubnub(mp_module.MPModule):
                     self.mindelay = self.mindelay - 0.1
                 else:
                     print("forwardpubnub: 0.1 is fastest")
+                self.pubnub.publish(channel='speed', message=self.mindelay)
             elif (message == 'slower'):
                 if (self.mindelay + 0.1) < 10:
                     self.mindelay = self.mindelay + 0.1
                 else:
                     print("forwardpubnub: 10s is slowest")
+                self.pubnub.publish(channel='speed', message=self.mindelay)
 
     def setDebug(self, args):
         if self.debug:
@@ -94,7 +95,7 @@ class ForwardPubnub(mp_module.MPModule):
             if self.debug:
                 print("forwardpubnub %f: %f,%f,%f" % (time.time() * 1000, m.pitch, m.yaw, m.roll))
             else:
-                self.pubnub.publish(channel=self.pubnubChannel, message=[self.last * 1000, m.pitch, m.yaw, m.roll])
+                self.pubnub.publish(channel='gyroscope', message=[self.last * 1000, m.pitch, m.yaw, m.roll])
 
 def init(mpstate):
     '''initialise module'''
