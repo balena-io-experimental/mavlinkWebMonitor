@@ -36,8 +36,8 @@ class ForwardPubnub(mp_module.MPModule):
                 print("forwardpubnub: Received kill!")
                 # https://github.com/mavlink/mavlink/blob/master/message_definitions/v1.0/common.xml
                 self.master.mav.command_long_send(
-                    1,  # target_system
-                    1, # target_component
+                    self.target_system,  # target_system
+                    self.target_component, # target_component
                     mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, # command
                     0, # confirmation
                     0, # param1
