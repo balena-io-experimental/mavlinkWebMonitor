@@ -1,33 +1,36 @@
-console.log('test')
 # Create the chart
 chart = new Highcharts.Chart(
 	chart:
 		renderTo: 'container'
 		defaultSeriesType: 'spline'
 		animation: false
+		zoomType: 'x'
 	title:
 		text: 'Live gyroscope'
 	xAxis:
 		type: 'datetime'
 		tickPixelInterval: 10
-		maxZoom: 20 * 1000
 	yAxis:
 		minPadding: 0.2
 		maxPadding: 0.2
+		maxZoom: 4
 	plotOptions:
 		series:
 			animation: false
 	series: [
 		{
 			name: 'pitch'
+			color: 'red'
 			data: []
 		}
 		{
 			name: 'yaw'
+			color: 'green'
 			data: []
 		}
 		{
 			name: 'roll'
+			color: 'blue'
 			data: []
 		}
 	]
@@ -46,12 +49,35 @@ pubnub.subscribe(
 	message : (msg, envelope, channelOrGroup, time, channel) ->
 		document.getElementById('speed').innerText = (1 / msg).toFixed(1) + 'Hz'
 )
+
+pubnub.subscribe(
+	channel : 'status',
+	message : (msg, envelope, channelOrGroup, time, channel) ->
+		[ t, event ] = msg
+		if event is 'start'
+			chart.xAxis[0].addPlotLine(
+				value: t
+				color: 'green'
+				width: 2
+			)
+		if event is 'stop'
+			chart.xAxis[0].addPlotLine(
+				value: t
+				color: 'red'
+				width: 2
+			)
+)
+
+stop = false
  
 console.log("Subscribing..")
 pubnub.subscribe(
 	channel : 'gyroscope',
 	message : (msg, envelope, channelOrGroup, time, channel) ->
 		if not Array.isArray(msg)
+			return
+
+		if stop
 			return
 
 		[ x_series, y_series, z_series ] = chart.series
@@ -89,4 +115,8 @@ document.getElementById('faster').addEventListener('click', ->
 		channel : 'gyroscope'
 		message : 'faster'
 	)
+)
+
+document.getElementById('stop').addEventListener('click', ->
+	stop = not stop
 )
