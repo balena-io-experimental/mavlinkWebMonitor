@@ -1,20 +1,20 @@
-FROM resin/edison-python:2.7
+FROM i386/debian:jessie
 
-RUN apt-get update && apt-get install python-dev gcc python-numpy && rm -rf /var/lib/apt/lists/*
-
-RUN pip install mavproxy pubnub
-
-# Install the mavlink module
-COPY ./mavproxy_forwardpubnub.py /usr/local/lib/python2.7/site-packages/MAVProxy/modules
-
-# Autoload the mavlink module
-COPY ./mavinit.scr /root/.mavinit.scr
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    gcc \
+    python \
+    python-dev \
+    python-pip \
+    python-requests \
+    python-serial \
+  && pip install pymavlink pubnub \
+  && apt-get purge -y gcc python-dev python-pip \
+  && apt-get -y autoremove \
+  && rm -rf /var/lib/apt/lists/*
 
 # Mavlink monitor
 COPY ./mavlink_forwardpubnub.py /bin
-
-# Use the mavproxy tool
-#CMD /bin/sh -c 'mavproxy.py --master=/dev/ttyMFD1 --baudrate=921600 --logfile=/dev/null --daemon; sleep 999999;'
 
 # Use the mavlink tool
 CMD mavlink_forwardpubnub.py
