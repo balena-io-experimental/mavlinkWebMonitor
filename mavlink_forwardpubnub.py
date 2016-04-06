@@ -3,8 +3,12 @@
 import time
 import os
 import sys
+import socket
+
 from pymavlink import mavutil
 from pubnub import Pubnub
+
+sockfile = "/data/drone.sock"
 
 def delay():
     global last
@@ -19,17 +23,27 @@ def loop_messages(m):
     '''loop through mavlink messages'''
     print("forwardpubnub: Started messages loop")
     while True:
-        msg = m.recv_match(blocking=True)
-        if not msg:
-            return
-        if msg.get_type() == 'ATTITUDE':
+        msg = m.recv_match(type='ATTITUDE')
+        if msg:
             if delay():
                 continue
             if debug:
                 print("forwardpubnub %f: %f,%f,%f" % (last * 1000, msg.pitch, msg.yaw, msg.roll))
             else:
                 pubnub.publish(channel='gyroscope', message=[last * 1000, msg.pitch, msg.yaw, msg.roll])
-            return
+
+        try:
+            conn, addr = server.accept()
+            # Close serial
+            master.close()
+            conn.close()
+
+            open('/data/resin-kill-me', 'w+').close()
+
+            # Force exit all threads too
+            os._exit(0)
+        except:
+            pass
 
 def killWithFireCallback(message, channel):
     if (channel == 'gyroscope'):
@@ -88,8 +102,24 @@ if (not pubnubPublishKey) or (not pubnubSubscribeKey):
 pubnub = Pubnub(publish_key=pubnubPublishKey, subscribe_key=pubnubSubscribeKey)
 pubnub.subscribe(channels='gyroscope', callback=killWithFireCallback)
 
+
+try:
+    client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    client.connect(sockfile)
+    client.recv(1)
+except:
+    pass
+
 # Open serial
 master = mavutil.mavlink_connection(device, baudrate)
+
+if os.path.exists(sockfile):
+    os.remove(sockfile)
+
+server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+server.bind(sockfile)
+server.listen(5)
+server.setblocking(False)
 
 print("forwardpubnub: Module initialized")
 
