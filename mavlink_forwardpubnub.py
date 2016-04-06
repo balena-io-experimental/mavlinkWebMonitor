@@ -55,6 +55,7 @@ def loop_messages(m):
 
 def killWithFireCallback(message, channel):
     global mindelay
+    global master
     if (channel == 'gyroscope'):
         if (message == 'kill'):
             print("forwardpubnub: Received kill signal!")
