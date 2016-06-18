@@ -17,4 +17,4 @@ RUN apt-get update \
 COPY ./mavlink_forwardpubnub.py /bin
 
 # Use the mavlink tool
-CMD mavlink_forwardpubnub.py
+CMD mavlink_forwardpubnub.py; while true; do sleep 100; done
