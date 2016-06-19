@@ -17,7 +17,7 @@ ffmpegParams = [
 	'-i', '/dev/video0'
 	'-f', 'mpeg1video'
 	'-r', '24'
-	# '-loglevel', 'quiet'
+	'-loglevel', 'error'
 	'-'
 ]
 
@@ -46,7 +46,6 @@ wss.on 'connection', (socket) ->
 ffmpeg.stdout.on 'data', (chunk) ->
 	if currentSocket isnt null
 		try
-			console.log(chunk.length)
 			currentSocket.send(chunk, binary: true)
 		catch e
 			console.log(e)
