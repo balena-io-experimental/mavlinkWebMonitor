@@ -58,8 +58,10 @@ app.post '/die', (req, res) ->
 
 server.on('request', app)
 
-http.request { method: 'POST', path: '/die' }, ->
+req = http.request { method: 'POST', path: '/die' }, ->
 	server.listen(80)
 .on 'error', (e) ->
 	console.log('ignored error', e)
 	server.listen(80)
+
+req.end()
