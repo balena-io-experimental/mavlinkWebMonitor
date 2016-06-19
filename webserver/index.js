@@ -22,11 +22,13 @@
 
   STREAM_MAGIC_BYTES = 'jsmp';
 
-  ffmpegParams = ['-s', '80x60', '-f', 'video4linux2', '-i', '/dev/video0', '-f', 'mpeg1video', '-r', '24', '-loglevel', 'quiet', '-'];
+  ffmpegParams = ['-s', '80x60', '-f', 'video4linux2', '-i', '/dev/video0', '-f', 'mpeg1video', '-r', '24', '-'];
 
   ffmpeg = spawn('ffmpeg', ffmpegParams);
 
   ffmpeg.stdout.resume();
+
+  ffmpeg.stderr.pipe(process.stderr);
 
   width = 80;
 
@@ -41,6 +43,7 @@
     streamHeader.write(STREAM_MAGIC_BYTES);
     streamHeader.writeUInt16BE(width, 4);
     streamHeader.writeUInt16BE(height, 6);
+    console.log('sending mpeg header');
     return socket.send(streamHeader, {
       binary: true
     });
@@ -50,6 +53,7 @@
     var e, error;
     if (currentSocket !== null) {
       try {
+        console.log(chunk.length);
         return currentSocket.send(chunk, {
           binary: true
         });

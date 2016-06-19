@@ -17,7 +17,7 @@ ffmpegParams = [
 	'-i', '/dev/video0'
 	'-f', 'mpeg1video'
 	'-r', '24'
-	'-loglevel', 'quiet'
+	# '-loglevel', 'quiet'
 	'-'
 ]
 
@@ -25,7 +25,7 @@ ffmpeg = spawn('ffmpeg', ffmpegParams)
 
 ffmpeg.stdout.resume()
 
-# ffmpeg.stderr.pipe(process.stderr)
+ffmpeg.stderr.pipe(process.stderr)
 
 width = 80
 height = 60
@@ -40,11 +40,13 @@ wss.on 'connection', (socket) ->
 	streamHeader.writeUInt16BE(width, 4)
 	streamHeader.writeUInt16BE(height, 6)
 
+	console.log('sending mpeg header')
 	socket.send(streamHeader, binary:true)
 
 ffmpeg.stdout.on 'data', (chunk) ->
 	if currentSocket isnt null
 		try
+			console.log(chunk.length)
 			currentSocket.send(chunk, binary: true)
 		catch e
 			console.log(e)
