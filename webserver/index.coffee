@@ -53,6 +53,7 @@ ffmpeg.stdout.on 'data', (chunk) ->
 app.post '/die', (req, res) ->
 	ffmpeg.kill('SIGTERM')
 	ffmpeg.on 'exit', ->
+		currentSocket.close()
 		server.close ->
 			res.send('OK')
 

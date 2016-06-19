@@ -70,12 +70,14 @@
 			client.addEventListener('error', function () {
 				console.log('Got error event, reconnecting');
 				var client = new WebSocket(address);
+				player.client = client;
 				player.initSocketClient(client);
 			});
 
 			client.addEventListener('close', function () {
 				console.log('Got close event, reconnecting');
 				var client = new WebSocket(address);
+				player.client = client;
 				player.initSocketClient(client);
 			});
 

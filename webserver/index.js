@@ -66,6 +66,7 @@
   app.post('/die', function(req, res) {
     ffmpeg.kill('SIGTERM');
     return ffmpeg.on('exit', function() {
+      currentSocket.close();
       return server.close(function() {
         return res.send('OK');
       });
