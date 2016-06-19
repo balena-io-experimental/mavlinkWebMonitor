@@ -66,9 +66,10 @@
     ffmpeg.kill('SIGTERM');
     return ffmpeg.on('exit', function() {
       currentSocket.close();
-      return server.close(function() {
-        return res.send('OK');
-      });
+      res.send('OK');
+      return setTimeout(function() {
+        return server.close();
+      }, 10);
     });
   });
 
@@ -79,8 +80,11 @@
     path: '/die'
   }, function(res) {
     return res.on('end', function() {
-      console.log('Got end event');
-      return server.listen(80);
+      console.log('Got end event, listening in 30ms');
+      setTimeout(function() {
+        return server.listen(80);
+      });
+      return 30;
     });
   }).on('error', function(e) {
     console.log('ignored error', e);

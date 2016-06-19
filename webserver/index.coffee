@@ -54,15 +54,19 @@ app.post '/die', (req, res) ->
 	ffmpeg.kill('SIGTERM')
 	ffmpeg.on 'exit', ->
 		currentSocket.close()
-		server.close ->
-			res.send('OK')
+		res.send('OK')
+		setTimeout ->
+			server.close()
+		, 10
 
 server.on('request', app)
 
 req = http.request { method: 'POST', path: '/die' }, (res) ->
 	res.on 'end', ->
-		console.log('Got end event')
-		server.listen(80)
+		console.log('Got end event, listening in 30ms')
+		setTimeout ->
+			server.listen(80)
+		30
 .on 'error', (e) ->
 	console.log('ignored error', e)
 	server.listen(80)
