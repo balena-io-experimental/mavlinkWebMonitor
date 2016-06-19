@@ -52,8 +52,10 @@ ffmpeg.stdout.on 'data', (chunk) ->
 			console.log(e)
 
 app.post '/die', (req, res) ->
-	server.close ->
-		res.send('OK')
+	ffmpeg.kill('SIGTERM')
+	ffmpeg.on 'exit', ->
+		server.close ->
+			res.send('OK')
 
 server.on('request', app)
 

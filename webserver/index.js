@@ -65,8 +65,11 @@
   });
 
   app.post('/die', function(req, res) {
-    return server.close(function() {
-      return res.send('OK');
+    ffmpeg.kill('SIGTERM');
+    return ffmpeg.on('exit', function() {
+      return server.close(function() {
+        return res.send('OK');
+      });
     });
   });
 
