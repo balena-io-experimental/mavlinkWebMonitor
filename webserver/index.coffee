@@ -3,6 +3,8 @@ express = require 'express'
 { spawn } = require 'child_process'
 WebSocketServer = require('ws').Server
 
+THERMAL_CAMERA = 0
+
 server = http.createServer()
 wss = new WebSocketServer(server: server)
 
@@ -44,7 +46,7 @@ wss.on 'connection', (socket) ->
 	socket.send(streamHeader, binary:true)
 
 ffmpeg.stdout.on 'data', (chunk) ->
-	if currentSocket isnt null
+	if currentSocket isnt null and THERMAL_CAMERA
 		try
 			currentSocket.send(chunk, binary: true)
 		catch e
