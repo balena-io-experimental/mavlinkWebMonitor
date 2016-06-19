@@ -22,7 +22,7 @@
 
   STREAM_MAGIC_BYTES = 'jsmp';
 
-  ffmpegParams = ['-s', '80x60', '-f', 'video4linux2', '-i', '/dev/video0', '-f', 'mpeg1video', '-r', '24', '-loglevel', 'error', '-'];
+  ffmpegParams = ['-s', '80x60', '-f', 'video4linux2', '-i', '/dev/video0', '-f', 'mpeg1video', '-r', '24', '-'];
 
   ffmpeg = spawn('ffmpeg', ffmpegParams);
 

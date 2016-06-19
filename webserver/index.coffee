@@ -17,7 +17,7 @@ ffmpegParams = [
 	'-i', '/dev/video0'
 	'-f', 'mpeg1video'
 	'-r', '24'
-	'-loglevel', 'error'
+	# '-loglevel', 'error'
 	'-'
 ]
 
