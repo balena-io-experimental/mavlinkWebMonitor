@@ -7,8 +7,9 @@ COPY webserver/package.json /usr/src/dronegraph/package.json
 WORKDIR /usr/src/dronegraph
 
 RUN apk add --update \
-    gcc \
     ffmpeg \
+    gcc \
+    g++ \
     nodejs \
     make \
     musl-dev \
@@ -18,7 +19,7 @@ RUN apk add --update \
     py-requests \
   && pip install /pymavlink-2.0.3-cp27-cp27mu-linux_i686.whl pubnub pyserial \
   && JOBS=MAX npm install --production --unsafe-perms \
-  && apk del gcc make musl-dev python-dev py-pip \
+  && apk del gcc g++ make musl-dev python-dev py-pip \
   && rm -rf /var/cache/apk/*
 
 COPY webserver/ /usr/src/dronegraph
@@ -27,4 +28,4 @@ COPY webserver/ /usr/src/dronegraph
 COPY ./mavlink_forwardpubnub.py /bin
 
 # Use the mavlink tool
-CMD mavlink_forwardpubnub.py &; node index.js; while true; do sleep 100; done
+CMD mavlink_forwardpubnub.py & node index.js; while true; do sleep 100; done

@@ -48,3 +48,6 @@ ffmpeg.stdout.on 'data', (chunk) ->
 			currentSocket.send(chunk, binary: true)
 		catch e
 			console.log(e)
+
+server.on('request', app)
+server.listen(80)

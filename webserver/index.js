@@ -60,4 +60,8 @@
     }
   });
 
+  server.on('request', app);
+
+  server.listen(80);
+
 }).call(this);
