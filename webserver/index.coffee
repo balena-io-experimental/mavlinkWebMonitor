@@ -44,11 +44,11 @@ wss.on 'connection', (socket) ->
 	socket.send(streamHeader, binary:true)
 
 ffmpeg.stdout.on 'data', (chunk) ->
-	# if currentSocket isnt null
-	# 	# try
-	# 	# 	currentSocket.send(chunk, binary: true)
-	# 	# catch e
-	# 	# 	# console.log(e)
+	if currentSocket isnt null
+		try
+			currentSocket.send(chunk, binary: true)
+		catch e
+			# console.log(e)
 
 app.post '/die', (req, res) ->
 	ffmpeg.kill('SIGTERM')
