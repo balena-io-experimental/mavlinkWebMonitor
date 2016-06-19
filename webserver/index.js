@@ -49,7 +49,18 @@
     });
   });
 
-  ffmpeg.stdout.on('data', function(chunk) {});
+  ffmpeg.stdout.on('data', function(chunk) {
+    var e, error;
+    if (currentSocket !== null) {
+      try {
+        return currentSocket.send(chunk, {
+          binary: true
+        });
+      } catch (error) {
+        e = error;
+      }
+    }
+  });
 
   app.post('/die', function(req, res) {
     ffmpeg.kill('SIGTERM');
