@@ -22,7 +22,7 @@
 
   STREAM_MAGIC_BYTES = 'jsmp';
 
-  ffmpegParams = ['-s', '80x60', '-f', 'video4linux2', '-i', '/dev/video0', '-f', 'mpeg1video', '-r', '24', '-'];
+  ffmpegParams = ['-s', '80x60', '-f', 'video4linux2', '-i', '/dev/video0', '-f', 'mpeg1video', '-r', '24', '-loglevel', 'error', '-'];
 
   ffmpeg = spawn('ffmpeg', ffmpegParams);
 
@@ -78,8 +78,11 @@
   req = http.request({
     method: 'POST',
     path: '/die'
-  }, function() {
-    return server.listen(80);
+  }, function(res) {
+    return res.on('end', function() {
+      console.log('Got end event');
+      return server.listen(80);
+    });
   }).on('error', function(e) {
     console.log('ignored error', e);
     return server.listen(80);

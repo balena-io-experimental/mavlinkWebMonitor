@@ -17,7 +17,7 @@ ffmpegParams = [
 	'-i', '/dev/video0'
 	'-f', 'mpeg1video'
 	'-r', '24'
-	# '-loglevel', 'error'
+	'-loglevel', 'error'
 	'-'
 ]
 
@@ -59,8 +59,10 @@ app.post '/die', (req, res) ->
 
 server.on('request', app)
 
-req = http.request { method: 'POST', path: '/die' }, ->
-	server.listen(80)
+req = http.request { method: 'POST', path: '/die' }, (res) ->
+	res.on 'end', ->
+		console.log('Got end event')
+		server.listen(80)
 .on 'error', (e) ->
 	console.log('ignored error', e)
 	server.listen(80)
