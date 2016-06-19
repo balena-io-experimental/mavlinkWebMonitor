@@ -11,7 +11,7 @@ from pubnub import Pubnub
 sockfile = "/data/drone.sock"
 first=True
 
-foo = 1
+foo = 2
 
 def delay():
     global last
