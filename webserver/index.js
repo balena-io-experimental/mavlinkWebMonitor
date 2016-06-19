@@ -10,7 +10,7 @@
 
   WebSocketServer = require('ws').Server;
 
-  THERMAL_CAMERA = 0;
+  THERMAL_CAMERA = 1;
 
   server = http.createServer();
 

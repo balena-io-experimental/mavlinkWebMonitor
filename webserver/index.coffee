@@ -3,7 +3,7 @@ express = require 'express'
 { spawn } = require 'child_process'
 WebSocketServer = require('ws').Server
 
-THERMAL_CAMERA = 0
+THERMAL_CAMERA = 1
 
 server = http.createServer()
 wss = new WebSocketServer(server: server)
