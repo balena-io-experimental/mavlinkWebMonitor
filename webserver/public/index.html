@@ -68,17 +68,19 @@
 			var player = new jsmpeg(client, {canvas:canvas});
 
 			client.addEventListener('error', function () {
-				console.log('Got error event, reconnecting');
-				var client = new WebSocket(address);
-				player.client = client;
-				player.initSocketClient(client);
+				console.log('Got close event, reconnecting');
+				client = new WebSocket(address);
+
+				player.stop()
+				player = new jsmpeg(client, {canvas:canvas});
 			});
 
 			client.addEventListener('close', function () {
 				console.log('Got close event, reconnecting');
-				var client = new WebSocket(address);
-				player.client = client;
-				player.initSocketClient(client);
+				client = new WebSocket(address);
+
+				player.stop()
+				player = new jsmpeg(client, {canvas:canvas});
 			});
 
 		</script>
