@@ -58,7 +58,6 @@
         });
       } catch (error) {
         e = error;
-        return console.log(e);
       }
     }
   });

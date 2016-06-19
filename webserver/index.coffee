@@ -48,7 +48,7 @@ ffmpeg.stdout.on 'data', (chunk) ->
 		try
 			currentSocket.send(chunk, binary: true)
 		catch e
-			console.log(e)
+			# console.log(e)
 
 app.post '/die', (req, res) ->
 	ffmpeg.kill('SIGTERM')
