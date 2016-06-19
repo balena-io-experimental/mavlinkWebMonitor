@@ -60,8 +60,19 @@
     }
   });
 
+  app.post('/die', function(req, res) {
+    return server.close(function() {
+      return res.send('OK');
+    });
+  });
+
   server.on('request', app);
 
-  server.listen(80);
+  http.request({
+    method: 'POST',
+    path: '/die'
+  }, function() {
+    return server.listen(80);
+  });
 
 }).call(this);

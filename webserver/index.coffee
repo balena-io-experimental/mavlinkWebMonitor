@@ -49,5 +49,11 @@ ffmpeg.stdout.on 'data', (chunk) ->
 		catch e
 			console.log(e)
 
+app.post '/die', (req, res) ->
+	server.close ->
+		res.send('OK')
+
 server.on('request', app)
-server.listen(80)
+
+http.request { method: 'POST', path: '/die' }, ->
+	server.listen(80)
