@@ -43,6 +43,7 @@ def loop_messages(m):
         try:
             conn, addr = server.accept()
             # Close serial
+            master.arducopter_disarm()
             master.close()
             conn.close()
 
@@ -114,16 +115,32 @@ if (not pubnubPublishKey) or (not pubnubSubscribeKey):
 pubnub = Pubnub(publish_key=pubnubPublishKey, subscribe_key=pubnubSubscribeKey)
 pubnub.subscribe(channels='gyroscope', callback=killWithFireCallback)
 
+is_hand_over = False
 
 try:
     client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     client.connect(sockfile)
     client.recv(1)
+    is_hand_over = True
 except:
     pass
 
 # Open serial
 master = mavutil.mavlink_connection(device, baudrate)
+
+if is_hand_over:
+    master.mav.command_long_send(
+        1,  # target_system
+        1, # target_component
+        mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, # command
+        0, # confirmation
+        1, # param1
+        0, # param2
+        0, # param3
+        0, # param4
+        0, # param5
+        0, # param6
+        0) # param7
 
 # Sent a timestamp message when we are ready
 pubnub.publish(channel='status', message=[time.time() * 1000, 'start'])
