@@ -1,0 +1,25 @@
+{
+  "name": "dronegraph",
+  "version": "1.0.0",
+  "description": "Monitor attitude parameters from mavlinkproxy using a graph ===========================================================",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/resin-io-projects/mavlinkProxyWebMonitor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/resin-io-projects/mavlinkProxyWebMonitor/issues"
+  },
+  "homepage": "https://github.com/resin-io-projects/mavlinkProxyWebMonitor#readme",
+  "dependencies": {
+    "bufferutil": "^1.2.1",
+    "express": "^4.14.0",
+    "socket.io": "^1.4.6",
+    "ws": "^1.1.0"
+  }
+}
