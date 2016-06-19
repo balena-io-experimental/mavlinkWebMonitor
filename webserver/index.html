@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Andrei is the pilot</title>
+		<title></title>
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
@@ -10,18 +10,61 @@
 
 		<script src="http://code.highcharts.com/highcharts.js"></script>
 		<script src="https://cdn.pubnub.com/pubnub-3.14.5.min.js"></script>
+		<style type="text/css">
+			.container {
+				float: left;
+				width: 550px;
+				height: 460px;
+				background-color: #f5f5f5;
+				padding: 0;
+			}
+			#videoCanvas {
+				/* Always stretch the canvas, regardless of its
+				internal size. */
+				width: 480px;
+				height: 360px;
+			}
+		</style>
 	</head>
 	<body style="text-align: center">
-		<img width="100px" src="https://resin.io/logo/logo.svg"/>
-		<div style="margin: auto; font-weight: bold; font-size: 23px; margin-bottom: 100px;">resin.io</div>
-		<div style="margin-bottom: 10px;">
-			<button id="slower" type="button" class="btn btn-info">Slower</button>
-			<span id="speed">-</span>
-			<button id="faster" type="button" class="btn btn-info">Faster</button>
+		<!-- img width="100px" src="https://resin.io/logo/logo.svg"/ -->
+		<div style="margin: 0 auto; font-weight: bold; font-size: 23px; height: 60px">
+			Drone Control Panel
 		</div>
-		<button id="stop" type="button" class="btn btn-warning">Stop Graph</button>
-		<div id="container" style="width:800px; height:400px; margin: auto;"></div>
-		<button id="button" type="button" class="btn btn-danger">Kill with fire</button>
+		<div style="width: 1103px;height:80px;margin: 0 auto;background-color: #f5f5f5">
+			Device Status:
+		</div>
+		<div style="height:3px">
+
+		</div>
+		<div style="width: 1103px; margin: auto">
+			<div id="gyroscopeContainer" class="container">
+				<div style="color:#333333;font-size:18px;fill:#333333;width:550px;">
+					Gyroscope
+				</div>
+				<div id="gyroscope" style="width:480px; height:360px; margin: auto;"></div>
+				<div style="">
+					<button id="stop" type="button">Freeze Graph</button>
+				</div>
+			</div>
+			<div style="width: 3px; float: left; background-color: white; height: 50px">
+
+			</div>
+			<div id="videoCanvasContainer" class="container">
+				<div style="color:#333333;font-size:18px;fill:#333333;width:550px;">
+					Thermal Camera
+				</div>
+				<canvas id="videoCanvas" width="480" height="360"></canvas>
+			</div>
+		</div>
 		<script src="main.js"></script>
+		<script type="text/javascript" src="vendor/jsmpeg/jsmpg.js"></script>
+		<script type="text/javascript">
+			// Setup the WebSocket connection and start the player
+			var client = new WebSocket( 'wss://4b827a980945bab50b59417c67e7a0ac6c62117ad5ec88507b61ef55dcb2dc.devices.resinstaging.io' );
+
+			var canvas = document.getElementById('videoCanvas');
+			var player = new jsmpeg(client, {canvas:canvas});
+		</script>
 	</body>
 </html>

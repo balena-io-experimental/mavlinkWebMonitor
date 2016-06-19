@@ -1,12 +1,14 @@
 # Create the chart
 chart = new Highcharts.Chart(
 	chart:
-		renderTo: 'container'
+		renderTo: 'gyroscope'
 		defaultSeriesType: 'spline'
 		animation: false
 		zoomType: 'x'
 	title:
-		text: 'Live gyroscope'
+		text: ''
+		style:
+			display: 'none'
 	xAxis:
 		type: 'datetime'
 		tickPixelInterval: 10
@@ -69,7 +71,7 @@ pubnub.subscribe(
 )
 
 stop = false
- 
+
 console.log("Subscribing..")
 pubnub.subscribe(
 	channel : 'gyroscope',
@@ -90,31 +92,6 @@ pubnub.subscribe(
 		y_series.addPoint([t, y], true, shift)
 		z_series.addPoint([t, z], true, shift)
 	# connect: update
-)
- 
-
-document.getElementById('button').addEventListener('click', ->
-	console.log('publishing')
-	pubnub.publish(
-		channel : 'gyroscope'
-		message : 'kill'
-	)
-)
-
-document.getElementById('slower').addEventListener('click', ->
-	console.log('publishing')
-	pubnub.publish(
-		channel : 'gyroscope'
-		message : 'slower'
-	)
-)
-
-document.getElementById('faster').addEventListener('click', ->
-	console.log('publishing')
-	pubnub.publish(
-		channel : 'gyroscope'
-		message : 'faster'
-	)
 )
 
 document.getElementById('stop').addEventListener('click', ->
