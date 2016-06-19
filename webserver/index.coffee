@@ -57,5 +57,6 @@ server.on('request', app)
 
 http.request { method: 'POST', path: '/die' }, ->
 	server.listen(80)
-.on 'error', ->
-	console.log('ignored error')
+.on 'error', (e) ->
+	console.log('ignored error', e)
+	server.listen(80)

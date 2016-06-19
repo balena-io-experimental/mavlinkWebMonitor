@@ -73,8 +73,9 @@
     path: '/die'
   }, function() {
     return server.listen(80);
-  }).on('error', function() {
-    return console.log('ignored error');
+  }).on('error', function(e) {
+    console.log('ignored error', e);
+    return server.listen(80);
   });
 
 }).call(this);
