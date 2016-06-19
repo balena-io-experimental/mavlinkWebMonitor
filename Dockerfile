@@ -1,17 +1,19 @@
-FROM i386/debian:jessie
+FROM i386/alpine:3.4
 
-RUN apt-get update \
-  && apt-get install -y --no-install-recommends \
+COPY pymavlink-2.0.3-cp27-cp27mu-linux_i686.whl /pymavlink-2.0.3-cp27-cp27mu-linux_i686.whl
+
+RUN apk add --update \
     gcc \
+    ffmpeg \
+    nodejs \
+    musl-dev \
     python \
     python-dev \
-    python-pip \
-    python-requests \
-    python-serial \
-  && pip install pymavlink pubnub \
-  && apt-get purge -y gcc python-dev python-pip \
-  && apt-get -y autoremove \
-  && rm -rf /var/lib/apt/lists/*
+    py-pip \
+    py-requests \
+  && pip install /pymavlink-2.0.3-cp27-cp27mu-linux_i686.whl pubnub pyserial \
+  && apk del gcc musl-dev python-dev py-pip \
+  && rm -rf /var/cache/apk/*
 
 # Mavlink monitor
 COPY ./mavlink_forwardpubnub.py /bin
