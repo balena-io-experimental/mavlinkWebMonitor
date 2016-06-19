@@ -61,10 +61,21 @@
 		<script type="text/javascript" src="vendor/jsmpeg/jsmpg.js"></script>
 		<script type="text/javascript">
 			// Setup the WebSocket connection and start the player
-			var client = new WebSocket( 'wss://4b827a980945bab50b59417c67e7a0ac6c62117ad5ec88507b61ef55dcb2dc.devices.resinstaging.io' );
-
 			var canvas = document.getElementById('videoCanvas');
+
+			var client = new WebSocket( 'wss://4b827a980945bab50b59417c67e7a0ac6c62117ad5ec88507b61ef55dcb2dc.devices.resinstaging.io' );
 			var player = new jsmpeg(client, {canvas:canvas});
+
+			client.addEventListener('error', function () {
+				var client = new WebSocket( 'wss://4b827a980945bab50b59417c67e7a0ac6c62117ad5ec88507b61ef55dcb2dc.devices.resinstaging.io' );
+				player.initSocketClient(client);
+			});
+
+			client.addEventListener('close', function () {
+				var client = new WebSocket( 'wss://4b827a980945bab50b59417c67e7a0ac6c62117ad5ec88507b61ef55dcb2dc.devices.resinstaging.io' );
+				player.initSocketClient(client);
+			});
+
 		</script>
 	</body>
 </html>
