@@ -51,7 +51,7 @@ ffmpeg.stdout.on('data', function(chunk) {
 	if (currentSocket !== null && THERMAL_CAMERA) {
 		try {
 			currentSocket.send(chunk, { binary: true });
-		} catch {
+		} catch (e) {
 			// ignore error
 		}
 	}
