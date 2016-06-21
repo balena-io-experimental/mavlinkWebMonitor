@@ -3,7 +3,7 @@ var express = require('express');
 var spawn = require('child_process').spawn;
 var WebSocketServer = require('ws').Server;
 
-var THERMAL_CAMERA = 0;
+var THERMAL_CAMERA = 1;
 var WIDTH = 80;
 var HEIGHT = 60;
 var STREAM_MAGIC_BYTES = 'jsmp';
